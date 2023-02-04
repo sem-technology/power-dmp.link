@@ -12,12 +12,14 @@ namespace :log do
         end
       end
     end
+    command = "gsutil cp ./log/production/processed-audience-#{arg[:date]}.log.csv gs://dmp-bucket-1987yama3/bigquery/powerdmp/"
+    `#{command}`
   end
 
   desc "ログデータをダウンロードする"
   task :download, :date do |task, arg|
     log_filepath = Application.root.join("log", "production", "audience-#{arg[:date]}.log.json")
-    command = "scp ryota.yamada@app01.sakura:/var/www/power-dmp.link/shared/log/backup/audience-#{arg[:date]}.log.json.tar.gz #{log_filepath}.tar.gz"
+    command = "scp ryota.yamada@app01.sakura:~/power-dmp.link/audience-#{arg[:date]}.log.json.tar.gz #{log_filepath}.tar.gz"
     `#{command}`
     `tar xzf #{log_filepath}.tar.gz`
     `mv audience-#{arg[:date]}.log.json #{log_filepath}`
